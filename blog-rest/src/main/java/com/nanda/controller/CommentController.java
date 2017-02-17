@@ -3,11 +3,11 @@ package com.nanda.controller;
 import java.util.List;
 
 import org.apache.commons.mail.EmailException;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nanda.exception.ServiceException;
 import com.nanda.model.Article;
@@ -15,20 +15,21 @@ import com.nanda.model.Comment;
 import com.nanda.model.User;
 import com.nanda.service.CommentService;
 
-@Controller
+@RestController
 @RequestMapping("/comments")
 public class CommentController {
-	Comment c=new Comment();
-	CommentService cs=new CommentService();
+	
 	@GetMapping("/listComments")
-	public String index(ModelMap modelMap, @RequestParam("id") int id){
+	public List<Comment> index(@RequestParam("id") int id){
+		CommentService cs=new CommentService();
 		List<Comment> list = cs.list(id);
-		modelMap.addAttribute("Comments", list);
-		return "../comments.jsp";
+		return list;
 	}
 	
 	@GetMapping("/deleteComments")
 	public String delete(@RequestParam("id") int id,ModelMap modelMap) {
+		Comment c=new Comment();
+		CommentService cs=new CommentService();
 		c.setId(id);
 		
 		try {
@@ -42,6 +43,8 @@ public class CommentController {
 	}
 	@GetMapping("/insertComments")
 	public String delete(@RequestParam("articleId") int articleId,@RequestParam("userId") int userId,@RequestParam("comments") String comments,ModelMap modelMap) {
+		Comment c=new Comment();
+		CommentService cs=new CommentService();
 		Article a=new Article();
 		a.setId(articleId);
 		c.setArticleId(a);
