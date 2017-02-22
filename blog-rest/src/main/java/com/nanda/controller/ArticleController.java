@@ -2,33 +2,29 @@ package com.nanda.controller;
 
 import java.util.List;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.nanda.exception.ServiceException;
 import com.nanda.model.Article;
 import com.nanda.service.ArticleService;
 
-@Controller
+@RestController
 @RequestMapping("/Article")
 public class ArticleController {
 
 	@GetMapping
-	public String index(ModelMap modelMap){
+	public List<Article> index(){
 		ArticleService articleService = new ArticleService();
-		Article article=new Article();
 		List<Article> list = articleService.list();
-		modelMap.addAttribute("Article_LIST", list);
-		return "articleList.jsp";
+		return list;
 	}
 	
 	@GetMapping("/myArticles")
-	public String myArticles(ModelMap modelMap,@RequestParam("id") int id) {
+	public List<Article> myArticles(@RequestParam("id") int id) {
 		ArticleService articleService = new ArticleService();
-		Article article=new Article();
 		List<Article> list=null;
 		try {
 			list = articleService.listMyArticle(id);
@@ -36,7 +32,7 @@ public class ArticleController {
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
-		modelMap.addAttribute("Article_LIST", list);
-		return "../myArticle.jsp";
+		
+		return list;
 	}
 }

@@ -2,7 +2,6 @@ package com.nanda.controller;
 
 import java.util.List;
 
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,13 +21,13 @@ import com.nanda.service.RatingService;
 @RequestMapping("/ratings")
 public class RatingController {
 	@GetMapping
-	public List<Rating> list(@RequestParam("userId") int userId,ModelMap modelMap){
+	public List<Rating> list(@RequestParam("userId") int userId){
 		RatingService ratingService=new RatingService();
 		List<Rating> r=null;
 		try {
 			r = ratingService.list(userId);
 		} catch (ServiceException e) {
-			modelMap.addAttribute("ratingList",e.toString());
+			e.printStackTrace();
 		}
 		return r;
 		
